@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup
 #from send_mail import send_mail
 #import importlib
 
-moduleName = input('Enter module name:')
-importlib.import_module(moduleName)
+#moduleName = input('Enter module name:')
+#importlib.import_module(moduleName)
 app = Flask(__name__)
 
 @app.route("/", methods=['GET','POST'])

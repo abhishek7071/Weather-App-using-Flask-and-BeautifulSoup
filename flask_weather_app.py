@@ -7,23 +7,31 @@ app = Flask(__name__)
 @app.route("/", methods=['GET','POST'])
 def home():
     if request.method == 'POST':
-        city_name = request.form.get('city_name')
-        url = "https://www.timeanddate.com/weather/india/"+city_name+"/ext"
-        r = requests.get(url)
-        data = r.content
-        soup = BeautifulSoup(data,'html.parser')
-        div = soup.find_all('div',class_='h2')[0].get_text()
+        url = request.form.get('URL')
+        
+        #url = "https://www.timeanddate.com/weather/india/"+city_name+"/ext"
+        page1 = requests.get(url).text
+        soup = BeautifulSoup(page1, 'lxml')
+    # print(soup.prettify())
 
-        p = soup.find_all('p')[0].get_text()
+        product_name = soup.find('h1').text.strip()
+        page = requests.get(url)
+        
+        soup = BeautifulSoup(page.content,'html.parser')
+        
+        price = soup.find("div", {"class": "_3qQ9m1"}).text
+        price = price[1:]
+    
+    # This is used to remove the , in between the prices to make it a number
+        price_ar = price.split(",")
+        price = ''.join(price_ar)
+    
+    # Conver the price which is string to an integer to compare
+        price = int(price)
+    
 
-        div_five = soup.find_all('div',class_='five columns')
-
-        for i in div_five:
-            p_div = i.find_all('p')
-            pressure = p_div[4].get_text()
-            humidity = p_div[5].get_text()
-            return render_template("flask_weather_app.html", city=city_name, temp=div,
-                                   pressure=pressure,humidity=humidity)
+        
+        return render_template("flask_weather_app.html", price=price,product_name=product_name )
     return render_template("flask_weather_app.html")
 
 app.run(debug=True)

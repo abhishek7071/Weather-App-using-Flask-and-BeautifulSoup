@@ -1,8 +1,9 @@
 from flask import Flask,request,render_template
 import requests
 from bs4 import BeautifulSoup
-import requests, time, smtplib
-from datetime import datetime
+#import requests, time, smtplib
+#from datetime import datetime
+from send_email import send_email
 
 app = Flask(__name__)
 

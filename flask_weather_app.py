@@ -36,11 +36,11 @@ def home():
         price = int(price)
         
         
-        if desired_price >= price:
+       # if desired_price >= price:
               send_mail()
 
         
-        return render_template("flask_weather_app.html", price=price,product_name=product_name )
+        return render_template("flask_weather_app.html", price=price,product_name=product_name,desired_price=desired_price )
     return render_template("flask_weather_app.html")
 
 app.run(debug=True)

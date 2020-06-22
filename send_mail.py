@@ -10,7 +10,7 @@ def send_mail():
             desired_price) + ".\n So, hurry up & check the amazon link right now : " + url
         msg = f"Subject: {subject} \n\n {body} "
         server.sendmail(
-            '',
+            'sender_email',
             'Abhishek7071631646@gmail.com', msg
         )
         

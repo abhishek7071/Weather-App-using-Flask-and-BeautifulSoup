@@ -3,11 +3,11 @@ import requests
 from bs4 import BeautifulSoup
 #import requests, time, smtplib
 #from datetime import datetime
-#from send_mail import send_mail
-#import importlib
+from send_mail import send_mail
+import importlib
 
-#moduleName = input('Enter module name:')
-#importlib.import_module(moduleName)
+moduleName = input('Enter module name:')
+importlib.import_module(moduleName)
 app = Flask(__name__)
 
 @app.route("/", methods=['GET','POST'])
@@ -36,12 +36,17 @@ def home():
         price = int(price)
         
         
-       # if desired_price >= price:
-              #send_mail()
+        if desired_price >= price:
+              send_mail()
 
         
         return render_template("flask_weather_app.html", price=price,product_name=product_name,desired_price=desired_price )
     return render_template("flask_weather_app.html")
 
 app.run(debug=True)
+
+
+
+
+
 

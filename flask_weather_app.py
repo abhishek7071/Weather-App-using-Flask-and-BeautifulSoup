@@ -1,7 +1,7 @@
 from flask import Flask,request,render_template
 import requests
 from bs4 import BeautifulSoup
-
+from __main__ import *
 app = Flask(__name__)
 
 @app.route("/", methods=['GET','POST'])

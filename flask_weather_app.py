@@ -1,5 +1,5 @@
 from flask import Flask,request,render_template
-import requests
+
 from bs4 import BeautifulSoup
 import requests, time, smtplib
 from datetime import datetime

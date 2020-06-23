@@ -5,7 +5,7 @@ import requests, time, smtplib
 from datetime import datetime
 #from send_mail import send_mail
 #import importlib
-import pytz import timezone
+from pytz import timezone
 
 
 

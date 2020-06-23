@@ -3,12 +3,12 @@ import requests
 from bs4 import BeautifulSoup
 #import requests, time, smtplib
 #from datetime import datetime
-from send_mail import send_mail
+#from send_mail import send_mail
 import importlib
 
 
 
-#import send_mail
+
 
 moduleName = input('Enter module name:')
 importlib.import_module(moduleName)

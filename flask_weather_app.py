@@ -5,7 +5,10 @@ from bs4 import BeautifulSoup
 #from datetime import datetime
 from send_mail import send_mail
 import importlib
-import send_mail
+
+
+
+#import send_mail
 
 moduleName = input('Enter module name:')
 importlib.import_module(moduleName)

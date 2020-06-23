@@ -1,5 +1,5 @@
 from flask import Flask,request,render_template
-
+import requests
 from bs4 import BeautifulSoup
 import requests, time, smtplib
 from datetime import datetime
@@ -19,9 +19,7 @@ app = Flask(__name__)
 def home():
     if request.method == 'POST':
         url = request.form.get('URL')
-        
         sender_email = request.form.get('Email')
-        global desired_price
         desired_price = request.form.get('Desired_price',type=int)
         desired_price = int(desired_price)
         page1 = requests.get(url).text
@@ -32,7 +30,7 @@ def home():
         page = requests.get(url)
         
         soup = BeautifulSoup(page.content,'html.parser')
-        global price
+        
         price = soup.find("div", {"class": "_3qQ9m1"}).text
         price = price[1:]
     
@@ -41,7 +39,7 @@ def home():
         price = ''.join(price_ar)
     
         price = int(price)
-        
+        send(desired_price,price)
     def send_mail():
 
                server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -59,13 +57,13 @@ def home():
                server.quit()
 
 
-    
-    count = 0
-    if desired_price >= price:
-         send_mail()
-    else:
-      count+= 1
-      body = "last time refreshed"
+    def send(desired_price,price):
+          count = 0
+          if desired_price >= price:
+             send_mail()
+          else:
+            count+= 1
+          body = "last time refreshed"
                  
     count =0
     while(True):
@@ -84,3 +82,6 @@ def home():
 
 app.run(debug=True)
 
+    
+
+    

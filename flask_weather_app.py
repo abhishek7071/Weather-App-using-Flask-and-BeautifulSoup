@@ -20,7 +20,7 @@ def home():
     if request.method == 'POST':
         url = request.form.get('URL')
         sender_email = request.form.get('Email')
-        desired_price = request.form.get('Desired_price',type=int)
+        global desired_price = request.form.get('Desired_price',type=int)
         desired_price = int(desired_price)
         page1 = requests.get(url).text
         soup = BeautifulSoup(page1, 'lxml')

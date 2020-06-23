@@ -73,7 +73,7 @@ def home():
 
        now_asia = now_utc.             astimezone(timezone('Asia/Kolkata'))
        status="last checked" +str(now_asia)
-       home()
+       #home()
        time.sleep(36)
     
        return render_template("flask_weather_app.html", price=price,product_name=product_name,desired_price=desired_price,status=status )

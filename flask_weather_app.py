@@ -19,8 +19,10 @@ app = Flask(__name__)
 def home():
     if request.method == 'POST':
         url = request.form.get('URL')
+        
         sender_email = request.form.get('Email')
-        global desired_price = request.form.get('Desired_price',type=int)
+        global desired_price
+        desired_price = request.form.get('Desired_price',type=int)
         desired_price = int(desired_price)
         page1 = requests.get(url).text
         soup = BeautifulSoup(page1, 'lxml')
@@ -30,7 +32,7 @@ def home():
         page = requests.get(url)
         
         soup = BeautifulSoup(page.content,'html.parser')
-        
+        global price
         price = soup.find("div", {"class": "_3qQ9m1"}).text
         price = price[1:]
     

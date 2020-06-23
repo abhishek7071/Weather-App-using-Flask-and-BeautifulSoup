@@ -1,17 +1,18 @@
+
 from flask import Flask,request,render_template
 import requests
 from bs4 import BeautifulSoup
-#import requests, time, smtplib
+import requests, time, smtplib
 #from datetime import datetime
 #from send_mail import send_mail
-import importlib
+#import importlib
 
 
 
 
 
-moduleName = input('Enter module name:')
-importlib.import_module(moduleName)
+#moduleName = input('Enter module name:')
+#importlib.import_module(moduleName)
 app = Flask(__name__)
 
 @app.route("/", methods=['GET','POST'])
@@ -39,12 +40,27 @@ def home():
     
         price = int(price)
         
+    def send_mail():
+
+               server = smtplib.SMTP('smtp.gmail.com', 587)
+               server.ehlo()
+               server.starttls()
+               server.ehlo()
+               server.login('aman765180@gmail.com', 'Neesu@123')
+               subject = "Price of " +str(product_name) +" has fallen down below Rs. " + str(desired_price)
+               body = "Hey Rahul! \n The price of Boat Headphone on AMAZON has fallen down"  + ".\n So, hurry up & check the amazon link right now : " + url
+               msg = f"Subject: {subject} \n\n {body} "
+               server.sendmail(
+            'sender_email',
+            'Abhishek7071631646@gmail.com', msg
+        )
+               server.quit()
         
-        if desired_price >= price:
-              send_mail()
+               if desired_price >= price:
+                    send_mail()
 
         
-        return render_template("flask_weather_app.html", price=price,product_name=product_name,desired_price=desired_price )
+    return render_template("flask_weather_app.html", price=price,product_name=product_name,desired_price=desired_price )
     return render_template("flask_weather_app.html")
 
 app.run(debug=True)

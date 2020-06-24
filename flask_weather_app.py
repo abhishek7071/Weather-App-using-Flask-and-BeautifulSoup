@@ -47,9 +47,9 @@ def home():
           status="last checked at" +str(now_asia)
           return render_template("flask_weather_app.html",price=price, product_name=product_name,desired_price=desired_price,status=status )
     return render_template("flask_weather_app.html")
-def scheduledTask():
-    print("This task is running every 5 seconds")
-scheduler.add_job(id ='Scheduled task', func = scheduledTask, trigger = 'interval', seconds = 5)
+#def scheduledTask():
+    #print("This task is running every 5 seconds")
+scheduler.add_job(id ='Scheduled task', func = home, trigger = 'interval', seconds = 50)
 scheduler.start()
 app.run(debug=True)
     

@@ -1,13 +1,16 @@
+
 from flask import Flask,request,render_template 
 from bs4 import BeautifulSoup
 import requests, time, smtplib
 from datetime import datetime
 #from send_mail import send_mail
 import importlib
+from flask_apscheduler import APScheduler
 from pytz import timezone
 moduleName = input('Enter module name:')
 importlib.import_module(moduleName)
 app = Flask(__name__)
+scheduler = APScheduler()
 
 @app.route("/", methods=['GET','POST'])
 def home():
@@ -44,14 +47,11 @@ def home():
           status="last checked at" +str(now_asia)
           return render_template("flask_weather_app.html",price=price, product_name=product_name,desired_price=desired_price,status=status )
     return render_template("flask_weather_app.html")
-    while(True):
-      time.sleep(36)
-
+def scheduledTask():
+    print("This task is running every 5 seconds")
+scheduler.add_job(id ='Scheduled task', func = scheduledTask, trigger = 'interval', seconds = 5)
+scheduler.start()
 app.run(debug=True)
-
-
-
-
     
 
     

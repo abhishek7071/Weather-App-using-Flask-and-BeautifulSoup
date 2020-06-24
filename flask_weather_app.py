@@ -1,5 +1,4 @@
-from flask import Flask,request,render_template
-import requests
+from flask import Flask,request,render_template 
 from bs4 import BeautifulSoup
 import requests, time, smtplib
 from datetime import datetime
@@ -35,30 +34,18 @@ def home():
         price = ''.join(price_ar)
     
         price = int(price)
-        send(desired_price,price)
-
-    def send(desired_price,price):
-          count = 0
-          if desired_price >= price:
-             send_mail()
-          else:
-            count+= 1
-          body = "last time refreshed"
-                 
-    count =0
-    while(True):
-       count+=1
-       format = "%Y-%m-%d %H:%M:%S %Z%z"
-       now_utc = datetime.now(timezone('UTC'))
-
-       now_asia = now_utc.             astimezone(timezone('Asia/Kolkata'))
-       status="last checked" +str(now_asia)
-       #home()
-       time.sleep(36)
-    
-       return render_template("flask_weather_app.html", product_name=product_name,desired_price=desired_price,status=status )
-  
+        
+        if desired_price >= price:
+          send_mail()
+        else:
+          format = "%Y-%m-%d %H:%M:%S %Z%z"
+          now_utc = datetime.now(timezone('UTC'))
+          now_asia = now_utc.             astimezone(timezone('Asia/Kolkata'))
+          status="last checked at" +str(now_asia)
+          return render_template("flask_weather_app.html",price=price, product_name=product_name,desired_price=desired_price,status=status )
     return render_template("flask_weather_app.html")
+    while(True):
+      time.sleep(36)
 
 app.run(debug=True)
 

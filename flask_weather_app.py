@@ -4,15 +4,10 @@ from bs4 import BeautifulSoup
 import requests, time, smtplib
 from datetime import datetime
 #from send_mail import send_mail
-#import importlib
+import importlib
 from pytz import timezone
-
-
-
-
-
-#moduleName = input('Enter module name:')
-#importlib.import_module(moduleName)
+moduleName = input('Enter module name:')
+importlib.import_module(moduleName)
 app = Flask(__name__)
 
 @app.route("/", methods=['GET','POST'])
@@ -41,22 +36,6 @@ def home():
     
         price = int(price)
         send(desired_price,price)
-    def send_mail():
-
-               server = smtplib.SMTP('smtp.gmail.com', 587)
-               server.ehlo()
-               server.starttls()
-               server.ehlo()
-               server.login('aman765180@gmail.com', 'Neesu@123')
-               subject = "Price of " +str(product_name) +" has fallen down below Rs. " + str(desired_price)
-               body = "Hey Rahul! \n The price of Boat Headphone on AMAZON has fallen down"  + ".\n So, hurry up & check the amazon link right now : " + url
-               msg = f"Subject: {subject} \n\n {body} "
-               server.sendmail(
-            'sender_email',
-            'Abhishek7071631646@gmail.com', msg
-        )
-               server.quit()
-
 
     def send(desired_price,price):
           count = 0
@@ -82,6 +61,9 @@ def home():
     return render_template("flask_weather_app.html")
 
 app.run(debug=True)
+             "
+
+
 
     
 

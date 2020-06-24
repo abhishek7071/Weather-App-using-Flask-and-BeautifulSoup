@@ -1,16 +1,17 @@
-
-from flask import Flask,request,render_template 
+from flask import Flask,render_template
 from bs4 import BeautifulSoup
 import requests, time, smtplib
 from datetime import datetime
-#from send_mail import send_mail
+#from  import send_mail
 import importlib
 from flask_apscheduler import APScheduler
 from pytz import timezone
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
 moduleName = input('Enter module name:')
 importlib.import_module(moduleName)
 app = Flask(__name__)
-scheduler = APScheduler()
+#scheduler = APScheduler()
 
 @app.route("/", methods=['GET','POST'])
 def home():
@@ -37,6 +38,7 @@ def home():
         price = ''.join(price_ar)
     
         price = int(price)
+        print(price)
         
         if desired_price >= price:
           send_mail()
@@ -47,11 +49,14 @@ def home():
           status="last checked at" +str(now_asia)
           return render_template("flask_weather_app.html",price=price, product_name=product_name,desired_price=desired_price,status=status )
     return render_template("flask_weather_app.html")
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func= home, trigger="interval", seconds=50)
+scheduler.start()
+atexit.register(lambda: scheduler.shutdown())
 #def scheduledTask():
     #print("This task is running every 5 seconds")
-scheduler.add_job(id ='Scheduled task', func = home, trigger = 'interval', seconds = 50)
-scheduler.start()
+#scheduler.add_job(id ='Scheduled task', func = scheduledTask, trigger = 'interval', seconds = 5)
+#scheduler.start()
 app.run(debug=True)
-    
 
-    

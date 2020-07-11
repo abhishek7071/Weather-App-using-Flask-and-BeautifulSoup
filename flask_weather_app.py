@@ -1,62 +1,72 @@
 from flask import Flask,render_template
-from bs4 import BeautifulSoup
-import requests, time, smtplib
-from datetime import datetime
-#from  import send_mail
-import importlib
-from flask_apscheduler import APScheduler
-from pytz import timezone
-import atexit
-from apscheduler.schedulers.background import BackgroundScheduler
-moduleName = input('Enter module name:')
-importlib.import_module(moduleName)
-app = Flask(__name__)
-#scheduler = APScheduler()
 
+app = Flask(__name__)
 @app.route("/", methods=['GET','POST'])
 def home():
     if request.method == 'POST':
-        url = request.form.get('URL')
-        sender_email = request.form.get('Email')
-        global desired_price
-        desired_price = request.form.get('Desired_price',type=int)
-        desired_price = int(desired_price)
-        page1 = requests.get(url).text
-        soup = BeautifulSoup(page1, 'lxml')
-    
+        from bs4 import BeautifulSoup
+import requests, time, smtplib
+#from notify_run import Notify
+from datetime import datetime
+import re
+import requests as r
+from bs4 import BeautifulSoup as bs
+searchquery = input("Enter the search query")
+search_query = searchquery.replace(' ', '+') 
+link="https://www.1mg.com/search/all?filter=true&name="+str(search_query)
+#link ="https://www.1mg.com/search/all?filter=true&name=Combiflam"
+html_page = r.get(link)
+soup = BeautifulSoup(html_page.content,"lxml")
 
-        product_name = soup.find('h1').text.strip()
-        page = requests.get(url)
-        
-        soup = BeautifulSoup(page.content,'html.parser')
-        global price
-        price = soup.find("div", {"class": "_3qQ9m1"}).text
-        price = price[1:]
-    
-    
-        price_ar = price.split(",")
-        price = ''.join(price_ar)
-    
-        price = int(price)
-        print(price)
-        
-        if desired_price >= price:
-          send_mail()
-        else:
-          format = "%Y-%m-%d %H:%M:%S %Z%z"
-          now_utc = datetime.now(timezone('UTC'))
-          now_asia = now_utc.             astimezone(timezone('Asia/Kolkata'))
-          status="last checked at" +str(now_asia)
+for i in soup.find_all('div',{'class':['style__horizontal-card___1Zwmt','style__product-box___3oEU6']}):
+	link = i.find('a',href=True)
+	if link is None:
+	     continue
+	link1 = link['href']
+	#print(link['href'])
+	print(link1)
+	break
+else:
+	link1="N/A"
+	print(link1)
+	
+if link1=="N/A":
+	print(link1)
+else:
+    url1= "https://www.1mg.com"  +str(link1)
+    print(url1)
+    page1 = r.get(url1)
+    soup = bs(page1.content, "html.parser")
+    price=soup.find("span" , {"class": "l3Regular"}).text
+    price = price[1:]
+    print(price)
+
+url2= "https://pharmeasy.in/search/all?name="+str(searchquery)
+p=r.get(url2)
+soup = BeautifulSoup(p.text, 'html.parser')
+#print(soup.prettify())
+for i in soup.find_all("div" , {"class":"GvJNB"}):
+	link = i.find('a',href=True)
+	if link is None:
+		continue
+	link2 = link['href']
+	break
+else:
+	link2="N/A"
+	#print(link['href'])
+	#print(link2)
+	
+if link2=="N/A":
+	print(link2)
+else:
+	url3="https://pharmeasy.in"+str(link2)
+	print(url3)
+	s=r.get(url3)
+	soup1 = BeautifulSoup(s.text, 'html.parser')
+	#print(soup.prettify())
+	t=soup1.find("div" , {"class":"_1_yM9"}).text
+	print(t)
           return render_template("flask_weather_app.html",price=price, product_name=product_name,desired_price=desired_price,status=status )
     return render_template("flask_weather_app.html")
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(func= home, trigger="interval", seconds=50)
-scheduler.start()
-atexit.register(lambda: scheduler.shutdown())
-#def scheduledTask():
-    #print("This task is running every 5 seconds")
-#scheduler.add_job(id ='Scheduled task', func = scheduledTask, trigger = 'interval', seconds = 5)
-#scheduler.start()
-app.run(debug=True)
 
